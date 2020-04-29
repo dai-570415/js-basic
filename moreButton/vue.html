@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.17.1/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="app">
+        <main class="contents">
+
+            <div class="user-list">
+                <div
+                    v-for="userlist in userlists"
+                    :key="userlist.id"
+                >
+                   {{ userlist.name }}
+                </div>
+            </div>
+
+            <button
+                v-if="(userlists.length - count) >= 0"
+                type="button"
+                @click="isMore"
+            >
+                もっと見る
+            </button>
+
+        </main>
+    </div>
+
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                count: 3,
+                users: [],
+            },
+            computed: {
+                userlists() {
+                    const users = this.users;
+                    return users.slice(0, this.count);
+                },
+            },
+            methods: {
+                isMore() {
+                    this.count += 3;
+                }
+            },
+            mounted() {
+                axios
+                .get('https://jsonplaceholder.typicode.com/users')
+                .then((res) => (this.users = res.data));
+            },
+        });
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    </style>
+
+</body>
+</html>
